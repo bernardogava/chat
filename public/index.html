@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <style>
+    body {
+      text-align: center;
+    }
+    .msg {
+      padding-left: 10px;
+      padding-top: 10px;
+      margin-bottom: 20px;
+      text-align: left;
+      max-width: 490px;
+      min-width: 300px;
+      min-height: 400px;
+      background-color: #dfdfdf;
+      margin: auto;
+      border-radius: 5px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .btn {
+      margin-top: 5px;
+      width: 100%;
+      height: 30px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      background-color: #dfdfdf;
+    }
+    .btn:hover {
+      background-color: #c9c7c7;
+    }
+    .input {
+      width: 100%;
+      height: 50px;
+      border-color: #dfdfdf;
+      border-style: solid;
+      margin: 0px;
+      outline: none;
+      border-radius: 5px;
+      resize: none;
+    }
+    #afterlog {
+      display: none;
+    }
+    .log h1 {
+      margin-bottom: 5em;
+    }
+    #notid {
+      margin: auto;
+      margin-top: 30px;
+      display: none;
+      width: 500px;
+      height: 50px;
+      background-color: #fffb0a;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: rgb(0, 0, 0);
+    }
+    .nome {
+      display: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      text-align: left;
+      width: auto;
+      height: 30px;
+      background-color: #dfdfdf;
+      border-bottom-right-radius: 8px;
+      padding-left: 5px;
+      padding-top: 10px;
+      padding-right: 10px;
+    }
+    .mensagens {
+      max-width: 480px;
+      word-wrap: break-word
+    }
+    .form {
+      max-width: 490px;
+      min-width: 300px;
+      margin: auto;
+      padding-top: 30px;
+    }
+    .formlog {
+      width: 300px;
+      margin: auto;
+    }
+
+    @media screen and (min-width: 320px) and (max-width: 700px){
+      h1 {
+        margin-top: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="nomeDisplay" class="nome"></div>
+
+  <div class="log" id="divlog">
+    <h1>Qual seu nome?</h1>
+
+    <div class="formlog">
+      <input type="text" id="nome" class="input" id="nome" ><br>
+      <input type="button" value="Ir" class="btn" id="log" >
+    </div>
+
+    <div id="notid">
+      <h3>Digite um Nome!</h3>
+    </div>
+  </div>
+
+  <div id="afterlog">
+    <h1>Chat</h1>
+
+    <div class="msg" id="display"></div>
+
+    <div class="form">
+      <textarea id="msg" class="input" autocomplete="off" placeholder="Mensagem"></textarea>
+      <br>
+      <input type="button" value="Enviar" class="btn" id="btn">
+    </div>
+  </div>
+
+  <script>
+    const socket = io()
+
+    const ler = (arg) => {
+      const msg = String(arg.msg)
+      document.getElementById('display').innerHTML += `<div class="mensagens"><strong>${arg.autor}</strong>: ${msg}</div>`
+    }
+
+    socket.on('mensagensAntigas', arg => {
+      for(mensagens of arg) {
+        ler(mensagens)
+      }
+    })
+
+    socket.on('receberMsg', arg => {
+      ler(arg)
+    })
+
+    const entrou = (arg) => {
+      document.getElementById('display').innerHTML += `<div class="mensagens"><strong>${arg} entrou no chat</strong></div>`
+    }
+
+    socket.on('login', (arg) => {
+      entrou(arg)
+    })
+
+    document.getElementById('log').addEventListener('click', () => {
+      const nome = String(document.getElementById('nome').value)
+      if(nome.length > 0) {
+        document.getElementById('notid').style.display = 'none'
+        document.getElementById('divlog').style.display = 'none'
+        document.getElementById('afterlog').style.display = 'block'
+        const display = document.getElementById('display')
+        const nomeDisplay = document.getElementById('nomeDisplay')
+        nomeDisplay.style.display = 'block'
+        nomeDisplay.innerHTML = 'Nome: ' + nome
+        
+        entrou(nome)
+        socket.emit('entrou', nome)
+
+        document.getElementById('btn').addEventListener('click', () => {
+          const msg = String(document.getElementById('msg').value)
+          if(msg.length > 0) {
+            document.getElementById('msg').value = ''
+            const data =  {
+              msg: msg,
+              autor: nome
+            }
+            ler(data)
+            socket.emit('sendMsg', data)
+          }
+        })
+
+      } else {
+        document.getElementById('notid').style.display = 'flex'
+      }
+    })
+
+  </script>
+</body>
+</html>
