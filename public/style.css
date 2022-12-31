@@ -1,0 +1,94 @@
+body {
+  overflow: hidden;
+  text-align: center;
+}
+.msg {
+  padding-left: 10px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+  max-width: 480px;
+  min-width: 290px;
+  height: 45vh;
+  background-color: #dfdfdf;
+  margin: auto;
+  border-radius: 5px;
+}
+h1 {
+  text-align: center;
+}
+.btn {
+  margin-top: 5px;
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #dfdfdf;
+}
+.btn:hover {
+  background-color: #c9c7c7;
+}
+.input {
+  width: 100%;
+  height: 50px;
+  border-color: #dfdfdf;
+  border-style: solid;
+  margin: 0px;
+  outline: none;
+  border-radius: 5px;
+  resize: none;
+}
+#afterlog {
+  display: none;
+}
+.log h1 {
+  margin-bottom: 5em;
+}
+#notid {
+  margin: auto;
+  margin-top: 30px;
+  display: none;
+  width: 500px;
+  height: 50px;
+  background-color: #fffb0a;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: rgb(0, 0, 0);
+}
+.nome {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  text-align: left;
+  width: auto;
+  height: 30px;
+  background-color: #dfdfdf;
+  border-bottom-right-radius: 8px;
+  padding-left: 5px;
+  padding-top: 10px;
+  padding-right: 10px;
+  overflow: visible;
+}
+.mensagens {
+  max-width: 480px;
+  word-wrap: break-word
+}
+.form {
+  max-width: 490px;
+  min-width: 300px;
+  margin: auto;
+  padding-top: 30px;
+}
+.formlog {
+  width: 300px;
+  margin: auto;
+}
+
+@media screen and (min-width: 320px) and (max-width: 700px){
+  h1 {
+    margin-top: 2em;
+  }
+}
